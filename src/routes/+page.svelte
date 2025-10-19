@@ -1,6 +1,6 @@
 <svelte:head>
-    <title>Home - YourSite</title>
-    <meta name="description" content="Welcome to YourSite - Building amazing experiences with modern web technologies." />
+    <title>Patraldo</title>
+    <meta name="description" content="i18n" />
 </svelte:head>
 
 <div class="hero">
