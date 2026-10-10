@@ -1,22 +1,26 @@
+<script>
+    import { page } from '$app/state';
+</script>
+
 <div class="admin-layout">
     <nav class="admin-nav">
         <div class="admin-header">
             <h1><a href="/admin">Admin Panel</a></h1>
         </div>
         <ul class="nav-links">
-            <li><a href="/admin/subscribers" class:active={$page.url.pathname === '/admin/subscribers'}>📧 Subscribers</a></li>
+            <li>
+                <a
+                    href="/admin/subscribers"
+                    class:active={page.url.pathname === '/admin/subscribers'}
+                >📧 Subscribers</a>
+            </li>
+
             <li><a href="/" target="_blank">🌐 View Site</a></li>
         </ul>
     </nav>
-    
-    <main class="admin-main">
-        <slot />
-    </main>
-</div>
 
-<script>
-    import { page } from '$app/stores';
-</script>
+    <main class="admin-main"><slot></slot></main>
+</div>
 
 <style>
     .admin-layout {

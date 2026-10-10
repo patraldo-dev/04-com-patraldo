@@ -1,4 +1,4 @@
-import { sendEmail as sendMailgunEmail } from '$lib/email.js';
+import { sendEmail as sendMailgunEmail } from '#lib/email.js';
 
 /**
  * SvelteKit server hooks

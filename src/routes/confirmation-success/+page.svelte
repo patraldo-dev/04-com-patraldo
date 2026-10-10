@@ -1,11 +1,11 @@
 <script>
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	
 	let already = false;
 	
 	onMount(() => {
-		already = $page.url.searchParams.get('already') === 'true';
+		already = page.url.searchParams.get('already') === 'true';
 	});
 </script>
 

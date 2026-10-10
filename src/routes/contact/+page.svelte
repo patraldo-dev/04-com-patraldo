@@ -88,7 +88,7 @@
 </div>
 
 <script>
-    import ContactForm from '$lib/components/ContactForm.svelte';
+    import ContactForm from '#lib/components/ContactForm.svelte';
 </script>
 
 <style>

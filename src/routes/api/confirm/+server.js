@@ -1,6 +1,6 @@
 // src/routes/api/confirm/+server.js
 import { json, redirect } from '@sveltejs/kit';
-import { sendEmail as sendMailgunEmail, getWelcomeEmailContent } from '$lib/email.js';
+import { sendEmail as sendMailgunEmail, getWelcomeEmailContent } from '#lib/email.js';
 
 export async function GET({ url, platform }) {
 	try {

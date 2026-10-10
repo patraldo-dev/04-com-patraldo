@@ -76,7 +76,7 @@
 </div>
 
 <script>
-    import SubscribeForm from '$lib/components/SubscribeForm.svelte';
+    import SubscribeForm from '#lib/components/SubscribeForm.svelte';
     
     export let data;
 </script>

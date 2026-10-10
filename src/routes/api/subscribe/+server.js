@@ -1,6 +1,6 @@
 // src/routes/api/subscribe/+server.js
 import { json } from '@sveltejs/kit';
-import { sendEmail as sendMailgunEmail, getConfirmationEmailContent } from '$lib/email.js';
+import { sendEmail as sendMailgunEmail, getConfirmationEmailContent } from '#lib/email.js';
 // Remove the crypto import, we'll use Web Crypto API
 //import crypto from 'crypto';
 

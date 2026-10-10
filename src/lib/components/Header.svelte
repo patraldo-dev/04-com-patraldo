@@ -1,3 +1,17 @@
+<script>
+    import { page } from '$app/state';
+
+    let mobileOpen = false;
+
+    function toggleMobile() {
+        mobileOpen = !mobileOpen;
+    }
+
+    function closeMobile() {
+        mobileOpen = false;
+    }
+</script>
+
 <header class="header">
     <div class="container">
         <nav class="nav">
@@ -21,20 +35,6 @@
         </nav>
     </div>
 </header>
-
-<script>
-    import { page } from '$app/stores';
-    
-    let mobileOpen = false;
-    
-    function toggleMobile() {
-        mobileOpen = !mobileOpen;
-    }
-    
-    function closeMobile() {
-        mobileOpen = false;
-    }
-</script>
 
 <style>
     .header {

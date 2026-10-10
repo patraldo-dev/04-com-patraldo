@@ -1,6 +1,6 @@
 // src/routes/api/resend-confirmation/+server.js
 import { json } from '@sveltejs/kit';
-import { sendEmail as sendMailgunEmail, getConfirmationEmailContent } from '$lib/email.js';
+import { sendEmail as sendMailgunEmail, getConfirmationEmailContent } from '#lib/email.js';
 
 export async function POST({ request, platform, url }) {
 	try {

@@ -1,0 +1,5 @@
+# Allow crawling. Curated map for AI agents: /llms.txt
+User-agent: *
+Disallow:
+
+Sitemap: https://patraldo.com/sitemap.xml

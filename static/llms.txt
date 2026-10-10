@@ -1,0 +1,11 @@
+# Antoine Patraldo — patraldo.com
+
+> Personal site of Antoine Patraldo: about, services, blog, and contact.
+
+## Pages
+
+- [Home](https://patraldo.com/)
+- [About](https://patraldo.com/about)
+- [Services](https://patraldo.com/services)
+- [Blog](https://patraldo.com/blog): posts are served at /blog/<slug>.
+- [Contact](https://patraldo.com/contact)

@@ -1,5 +1,5 @@
 <script>
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
 	/** @type {string} */
@@ -16,7 +16,7 @@
 
 	// Get email from URL params if provided
 	onMount(() => {
-		const urlEmail = $page.url.searchParams.get('email');
+		const urlEmail = page.url.searchParams.get('email');
 		if (urlEmail) {
 			email = urlEmail;
 		}
