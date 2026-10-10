@@ -1,10 +1,11 @@
 // src/routes/api/resend-confirmation/+server.js
 import { json } from '@sveltejs/kit';
 import { sendEmail as sendMailgunEmail, getConfirmationEmailContent } from '#lib/email.js';
+import { env } from 'cloudflare:workers';
 
 export async function POST({ request, platform, url }) {
 	try {
-		if (!platform?.env) {
+		if (!env) {
 			return json({ 
 				success: false, 
 				message: 'Service temporarily unavailable' 
@@ -30,7 +31,7 @@ export async function POST({ request, platform, url }) {
 		}
 
 		// Find the subscriber
-		const subscriber = await platform.env.DB
+		const subscriber = await env.DB
 			.prepare('SELECT id, confirmed FROM subscribers WHERE email = ? AND type = ?')
 			.bind(email, type)
 			.first();
@@ -57,7 +58,7 @@ const confirmationToken = Array.from(tokenArray, byte => byte.toString(16).padSt
 		const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
 		// Update the token
-		await platform.env.DB
+		await env.DB
 			.prepare('UPDATE subscribers SET confirmation_token = ?, token_expires_at = ? WHERE id = ?')
 			.bind(confirmationToken, expiresAt.toISOString(), subscriber.id)
 			.run();
@@ -70,7 +71,7 @@ const confirmationToken = Array.from(tokenArray, byte => byte.toString(16).padSt
 		const emailSent = await sendMailgunEmail({
 			to: email,
 			...emailContent
-		}, platform.env);
+		}, env);
 
 		if (!emailSent) {
 			console.error('Failed to resend confirmation email to:', email);

@@ -1,4 +1,5 @@
 import { json } from '@sveltejs/kit';
+import { env } from 'cloudflare:workers';
 
 /**
  * Simple admin authentication check
@@ -33,14 +34,14 @@ export async function GET({ request, platform }) {
 		}
 
 		// Ensure we have the platform environment
-		if (!platform?.env) {
+		if (!env) {
 			return json({ 
 				error: 'Service temporarily unavailable' 
 			}, { status: 500 });
 		}
 
 		// Fetch all subscribers with their details
-		const subscribers = await platform.env.DB
+		const subscribers = await env.DB
 			.prepare(`
 				SELECT id, email, type, created_at, active 
 				FROM subscribers 
@@ -75,7 +76,7 @@ export async function POST({ request, platform }) {
 			}, { status: 401 });
 		}
 
-		if (!platform?.env) {
+		if (!env) {
 			return json({ 
 				error: 'Service temporarily unavailable' 
 			}, { status: 500 });
@@ -87,7 +88,7 @@ export async function POST({ request, platform }) {
 		switch (action) {
 			case 'export_csv': {
 				// Export subscribers as CSV
-				const subscribers = await platform.env.DB
+				const subscribers = await env.DB
 					.prepare('SELECT email, type, created_at, active FROM subscribers ORDER BY created_at DESC')
 					.all();
 
@@ -114,7 +115,7 @@ export async function POST({ request, platform }) {
 				}
 
 				const placeholders = emails.map(() => '?').join(',');
-				const result = await platform.env.DB
+				const result = await env.DB
 					.prepare(`UPDATE subscribers SET active = false WHERE email IN (${placeholders})`)
 					.bind(...emails)
 					.run();

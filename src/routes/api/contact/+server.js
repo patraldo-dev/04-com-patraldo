@@ -1,13 +1,14 @@
 import { json } from '@sveltejs/kit';
+import { env } from 'cloudflare:workers';
 
 export async function POST({ request, platform }) {
-    // Access environment variables from platform.env
+    // Access environment variables from env
     const { 
         MAILGUN_API_KEY, 
         MAILGUN_DOMAIN, 
         MAILGUN_FROM_EMAIL,
         CONTACT_EMAIL 
-    } = platform.env;
+    } = env;
 
     try {
         const { name, email, subject, message } = await request.json();

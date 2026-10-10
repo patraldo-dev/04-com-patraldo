@@ -1,6 +1,7 @@
 // src/routes/api/confirm/+server.js
 import { json, redirect } from '@sveltejs/kit';
 import { sendEmail as sendMailgunEmail, getWelcomeEmailContent } from '#lib/email.js';
+import { env } from 'cloudflare:workers';
 
 export async function GET({ url, platform }) {
 	try {
@@ -10,12 +11,12 @@ export async function GET({ url, platform }) {
 			return new Response('Invalid confirmation link', { status: 400 });
 		}
 
-		if (!platform?.env) {
+		if (!env) {
 			return new Response('Service temporarily unavailable', { status: 500 });
 		}
 
 		// Find subscriber by token
-		const subscriber = await platform.env.DB
+		const subscriber = await env.DB
 			.prepare(`
 				SELECT id, email, type, token_expires_at, confirmed 
 				FROM subscribers 
@@ -42,7 +43,7 @@ export async function GET({ url, platform }) {
 		}
 
 		// Confirm the subscription
-		await platform.env.DB
+		await env.DB
 			.prepare(`
 				UPDATE subscribers 
 				SET confirmed = true, confirmed_at = ?, confirmation_token = null, token_expires_at = null
@@ -56,7 +57,7 @@ export async function GET({ url, platform }) {
 		await sendMailgunEmail({
 			to: subscriber.email,
 			...emailContent
-		}, platform.env);
+		}, env);
 
 		// Redirect to success page
 		throw redirect(302, '/confirmation-success');

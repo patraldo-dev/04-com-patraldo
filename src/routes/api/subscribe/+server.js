@@ -1,12 +1,13 @@
 // src/routes/api/subscribe/+server.js
 import { json } from '@sveltejs/kit';
 import { sendEmail as sendMailgunEmail, getConfirmationEmailContent } from '#lib/email.js';
+import { env } from 'cloudflare:workers';
 // Remove the crypto import, we'll use Web Crypto API
 //import crypto from 'crypto';
 
 export async function POST({ request, platform, url }) {
 	try {
-		if (!platform?.env) {
+		if (!env) {
 			return json({ 
 				success: false, 
 				message: 'Service temporarily unavailable' 
@@ -40,7 +41,7 @@ export async function POST({ request, platform, url }) {
 
 
 	// Check if email already exists and is confirmed
-		const existingSubscriber = await platform.env.DB
+		const existingSubscriber = await env.DB
 			.prepare('SELECT id, confirmed FROM subscribers WHERE email = ? AND type = ?')
 			.bind(email, type)
 			.first();
@@ -63,13 +64,13 @@ const confirmationToken = Array.from(tokenArray, byte => byte.toString(16).padSt
 
 		// If user exists but not confirmed, update their token
 		if (existingSubscriber) {
-			await platform.env.DB
+			await env.DB
 				.prepare('UPDATE subscribers SET confirmation_token = ?, token_expires_at = ? WHERE id = ?')
 				.bind(confirmationToken, expiresAt.toISOString(), existingSubscriber.id)
 				.run();
 		} else {
 			// Insert new unconfirmed subscriber
-			await platform.env.DB
+			await env.DB
 				.prepare(`
 					INSERT INTO subscribers (email, type, confirmation_token, token_expires_at, confirmed, created_at) 
 					VALUES (?, ?, ?, ?, false, ?)
@@ -86,7 +87,7 @@ const confirmationToken = Array.from(tokenArray, byte => byte.toString(16).padSt
 		const emailSent = await sendMailgunEmail({
 			to: email,
 			...emailContent
-		}, platform.env);
+		}, env);
 
 		if (!emailSent) {
 			console.error('Failed to send confirmation email to:', email);

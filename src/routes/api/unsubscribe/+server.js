@@ -1,4 +1,5 @@
 import { json } from '@sveltejs/kit';
+import { env } from 'cloudflare:workers';
 
 /**
  * @typedef {Object} UnsubscribeRequest
@@ -15,7 +16,7 @@ import { json } from '@sveltejs/kit';
 export async function POST({ request, platform }) {
 	try {
 		// Ensure we have the platform environment
-		if (!platform?.env) {
+		if (!env) {
 			return json({ 
 				success: false, 
 				message: 'Service temporarily unavailable' 
@@ -43,7 +44,7 @@ export async function POST({ request, platform }) {
 		}
 
 		// Check if email exists in database
-		const existingSubscriber = await platform.env.DB
+		const existingSubscriber = await env.DB
 			.prepare('SELECT id FROM subscribers WHERE email = ?')
 			.bind(email)
 			.first();
@@ -57,7 +58,7 @@ export async function POST({ request, platform }) {
 
 		// Mark subscriber as inactive instead of deleting
 		// This preserves the record for analytics and prevents re-subscription issues
-		const updateResult = await platform.env.DB
+		const updateResult = await env.DB
 			.prepare('UPDATE subscribers SET active = false WHERE email = ?')
 			.bind(email)
 			.run();
